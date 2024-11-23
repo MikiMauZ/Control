@@ -1,14 +1,18 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
-const port = 3000;  // Cambia este puerto si necesitas uno diferente
+const port = process.env.PORT || 3000;// Cambia este puerto si necesitas uno diferente
+const dbPath = process.env.NODE_ENV === 'production'  // Esto es nuevo
+  ? '/data/inventario.db' 
+  : './inventario.db';
+const db = new sqlite3.Database(dbPath);
 
 // Configuración de express para manejar JSON
 app.use(express.json());
 app.use(express.static('public'));
 
 // Crear conexión a la base de datos
-const db = new sqlite3.Database('inventario.db');
+// const db = new sqlite3.Database('inventario.db');
 
 // Crear tabla si no existe
 db.serialize(() => {
